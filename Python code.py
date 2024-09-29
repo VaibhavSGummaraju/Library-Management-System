@@ -2,6 +2,8 @@ Python code
 
 
 
+import numpy as np
+import pandas as pd 
 import mysql.connector
 print('                    ===============================')
 print('                      LIBRARY MANAGEMENT SYSTEM')
@@ -68,7 +70,7 @@ def s_create():
         elif(ch3 == 4):
             genre_create()
         else:
-            print('invalid input')
+            start()
 
 def bookid_create():
     conn=mysql.connector.connect(host='localhost',user='root',password='Vaibhav@123',database='lms1')
@@ -155,15 +157,15 @@ def memdetails_create():
 def add_create():
     conn=mysql.connector.connect(host='localhost',user='root',password='Vaibhav@123',database='lms1')
     a=conn.cursor()
-    a.execute('select memberId from members')
+    #a.execute('select memberId *from members')
     a.execute('select *from members')
     data1=a.fetchall()
     for i in data1:
          print(i[1])
-    name_name=input('enter your name:')
-    member_id=int(input('enter the next memberid:'))
-    join_date=input('enter date:')
-    a.execute('insert into members values("'+name_name+'","'+str(member_id)+'","'+join_date+'")')
+    membername=input('enter your name:')
+    memberid=int(input('enter the next memberid:'))
+    joindate=input('enter date:')
+    a.execute('insert into members values("'+membername+'","'+str(memberid)+'","'+joindate+'")')
     a.execute('select *from members')
     data1=a.fetchall()
     for i in data1:
@@ -177,12 +179,13 @@ def delete_create():
     conn=mysql.connector.connect(host='localhost',user='root',password='Vaibhav@123',database='lms1')
     a=conn.cursor()
     name_delete=input('enter the name to be deleted:')
-    a.execute('delete from members where name= "'+name_delete+'"')
+    a.execute('DELETE FROM members WHERE membername = %s', (name_delete,))
     a.execute('select *from members')
     data1=a.fetchall()
     for i in data1:
         print(i)
     print('members details deleted successfully')
+    
     conn.commit()
 
     
@@ -224,7 +227,7 @@ def transactions_create():
     while(True):
         print('1.modify book details')
         print('2.show graph')
-        print('3.select any number other than 1 and 2 to exit')
+        print('3.go back to previous options')
         ch5=int(input('enter your choice'))
     
         if(ch5==1):
@@ -233,6 +236,7 @@ def transactions_create():
             graph_create()
         elif(ch5==3):
             start()
+    
         else:
             break
         
