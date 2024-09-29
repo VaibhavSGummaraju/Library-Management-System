@@ -311,13 +311,23 @@ def updatebooks_create():
 def graph_create():
     import matplotlib.pyplot as plt
     import numpy as np
-    comp=np.array(['harry potter','wings of fire','da vince code'])
-    emp=np.array([80,30,50])
-    plt.bar(comp,emp)
-    plt.xlabel('books name')
-    plt.ylabel('copies available')
-    plt.title('bar graph')
+    conn=mysql.connector.connect(host='localhost',user='root',password='Vaibhav@123',database='lms1')
+    a=conn.cursor()
+    query = "SELECT booksname,copiesavailable FROM books"
+    a.execute(query)
+    results = a.fetchall()
+    item_names = [row[0] for row in results]  # First column (item_name)
+    copiesavailable = [row[1] for row in results]  # Second column (available_quantity)
+    plt.figure(figsize=(10, 5))
+    plt.bar(item_names, copiesavailable)
+    plt.xlabel('Item Name')
+    plt.ylabel('Available Quantity')
+    plt.title('Available Quantity of Items')
+    plt.xticks(rotation=45)
+    plt.tight_layout()  # Adjust layout to prevent clipping of labels
     plt.show()
+    conn.commit()
+
 
 while(True):
     print('1.books details')
